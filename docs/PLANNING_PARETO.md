@@ -1,8 +1,6 @@
 # 约束规划权衡（Pareto）
 
-面试不要只报「绕障成功率 80%」。资深口径是：
-
-> 在障碍膨胀（间隙代理）× 规划时限 × 姿态约束松紧 上扫网格，给出成功率 vs 轨迹时长的非支配前沿，再选产线工作点。
+在障碍膨胀（间隙代理）× 规划时限 × 姿态约束松紧上扫网格，得到成功率 vs 轨迹时长的非支配前沿，再选工作点——不要只报单一 `plan_rate`。
 
 ## 怎么跑
 
@@ -27,5 +25,5 @@ ros2 run arm_system eval_planning_pareto.py --quick --trials 4
 
 ## 和旧评测关系
 
-- `eval_planning_obstacle.py`：有/无障碍二值对比（入门）
-- `eval_planning_pareto.py`：约束权衡曲线（高级叙事）
+- `eval_planning_obstacle.py`：有/无障碍二值对比
+- `eval_planning_pareto.py`：约束权衡曲线

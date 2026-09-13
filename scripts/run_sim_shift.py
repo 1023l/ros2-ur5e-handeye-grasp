@@ -187,11 +187,11 @@ def write_report(path: Path, meta: Dict[str, Any], stages: List[Dict[str, Any]])
         f"- finished: {meta['finished']}",
         f"- with_planning: {meta['with_planning']}",
         "",
-        "## 这是在干什么（面试可说）",
+        "## Pipeline",
         "",
-        "没有真机时，用 **UR5e + MoveIt fake + 难场景视觉 + 工业口径手眼残差** 跑闭环班次：",
-        "标定噪声注入 → OpenCV 初值 → Ceres 风格一致性精炼 → 遮挡/表观深度抓取评分 →（可选）绕障规划成功率。",
-        "产出与产线同构的指标：一致性 RMSE、检测率、深度误差、plan_rate、失败模式分布。",
+        "UR5e + MoveIt fake + hard-scene vision + industrial-style hand-eye residuals:",
+        "noise injection → OpenCV init → consistency refine → grasp scoring → optional obstacle planning.",
+        "Metrics: consistency RMSE, detect rate, depth error, plan_rate, failure modes.",
         "",
         "## Stages",
         "",
@@ -227,16 +227,6 @@ def write_report(path: Path, meta: Dict[str, Any], stages: List[Dict[str, Any]])
         if s.get("returncode", 0) != 0 and s.get("stderr_tail"):
             lines.append(f"- stderr: `{s['stderr_tail'][:200]}`")
         lines.append("")
-    lines.extend(
-        [
-            "## 简历怎么写（示例）",
-            "",
-            "- 基于 ROS2 Humble + MoveIt2，搭建 UR5e 眼在手外仿真产线：手眼标定（OpenCV + 非线性一致性精炼）、",
-            "  难场景视觉抓取评分、障碍物场景下运动规划评测；用可复现指标闭环迭代。",
-            "- 手眼残差族对齐工业视觉引导工程（重投影 / 多位姿一致性，Ceres 同类），仿真噪声下对比初值与精炼。",
-            "",
-        ]
-    )
     path.write_text("\n".join(lines), encoding="utf-8")
 
 

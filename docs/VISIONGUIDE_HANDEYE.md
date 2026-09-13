@@ -1,30 +1,28 @@
-# Mapping: visionguide (KUKA 视觉引导) → arm_system
+# Hand-eye residuals: industrial Ceres stack → this package
 
-Your `visionguide` project already has the industrial Ceres hand-eye stack:
+Reference industrial stack (`visionguide`-style):
 
-| File | Role |
-|------|------|
-| `produce/CeresEyeToHandProblem.h` | 眼在手外：PnP 重投影 + `OptBaseInCamCeres` 多位姿一致性 |
-| `produce/CeresEyeInHandProblem.h` | 眼在手上：PnP 重投影 + `OptCameraCeres` |
-| `Calibration/DRCalibration.cpp` | Halcon `CalibrateHandEye` 初值（nonlinear） |
-| `DialogHandEye.cpp` | UI：采图 / 读机器人位姿 / 调标定 |
+| Module | Role |
+|--------|------|
+| Eye-to-hand Ceres problem | PnP reprojection + multi-pose consistency |
+| Eye-in-hand Ceres problem | Same family for camera-on-wrist |
+| Halcon / OpenCV hand-eye | Closed-form or nonlinear init |
+| Capture UI | Images + robot poses for calibration |
 
-**Ceres 是什么：** Google 的非线性最小二乘库。你在手眼里用它优化的不是“随便拟合”，而是：
-1. **重投影残差**：标定板 3D 点经手眼链投到图像，和检测 uv 差；
-2. **多位姿一致性**：不同机器人位姿下，物体在工具/基座系应一致，位姿差当残差。
+**Ceres** = Google nonlinear least squares. Typical costs:
+1. Reprojection of board points through the hand-eye chain
+2. Multi-pose consistency (object pose agrees across robot configurations)
 
-这和 KUKA 强相关：`DialogHandEye` + 机器人位姿文件就是产线标定流程；Ceres 是其中的优化器。
+## Mapping in this package
 
-## arm_system 里的对应
-
-| arm_system | 对应 visionguide 思想 |
-|------------|----------------------|
-| `handeye_ba.py` | SE3 位姿链残差 LM（仿真底板） |
-| `handeye_ceres_style.py` | **直接对齐** `calHandEyePose` / pair consistency |
-| `eval_handeye_ceres_style.py` | 噪声下对比 OpenCV vs 一致性 LM |
+| Module | Role |
+|--------|------|
+| `handeye_ba.py` | SE3 pose-chain residual LM |
+| `handeye_ceres_style.py` | Pair-consistency residual (eye-to-hand) |
+| `eval_handeye_ceres_style.py` | OpenCV vs consistency-LM under noise |
 
 ```bash
 ros2 run arm_system eval_handeye_ceres_style.py --trials 15
 ```
 
-真机时：把 visionguide 导出的 `ToolInBase` + `objInCam` 样本灌进同一 residual API，指标口径就和产线一致。
+On real hardware, feed `ToolInBase` + `objInCam` samples into the same residual API.
