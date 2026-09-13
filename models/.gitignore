@@ -1,0 +1,7 @@
+yolov8n.pt
+demo_target.jpg
+demo_target.txt
+_bus.jpg
+yolo_smoke_debug.jpg
+*.pt
+*.onnx

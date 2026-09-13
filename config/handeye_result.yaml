@@ -1,0 +1,14 @@
+frame_id: base_link
+child_frame_id: arm_camera_optical_frame
+translation:
+- 0.4008295093890585
+- 0.0007976074630105912
+- 0.5001738523821797
+rotation_xyzw:
+- 0.9999988522373676
+- 0.0007163995328291255
+- 0.00029681711733013714
+- -0.001301612559663071
+method: Park+SE3-LM-BA
+note: synthetic samples=12 opencv err_t=0.007025m err_r=0.044843rad ba_rmse 0.022845->0.013478
+  iters=10 err_t=0.001164m err_r=0.003030rad
