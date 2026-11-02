@@ -1,0 +1,88 @@
+{
+  "trials_per_point": 30,
+  "noise_levels": [
+    0.0,
+    0.015,
+    0.025,
+    0.035,
+    0.045,
+    0.055,
+    0.065,
+    0.075
+  ],
+  "modes": [
+    "geometric",
+    "nominal",
+    "vision_only",
+    "dock_only",
+    "fusion"
+  ],
+  "rows": [
+    {
+      "agv_dock_xy_noise": 0.0,
+      "geometric": 1.0,
+      "nominal": 1.0,
+      "vision_only": 1.0,
+      "dock_only": 1.0,
+      "fusion": 1.0
+    },
+    {
+      "agv_dock_xy_noise": 0.015,
+      "geometric": 1.0,
+      "nominal": 1.0,
+      "vision_only": 1.0,
+      "dock_only": 1.0,
+      "fusion": 1.0
+    },
+    {
+      "agv_dock_xy_noise": 0.025,
+      "geometric": 0.7333333333333333,
+      "nominal": 0.7333333333333333,
+      "vision_only": 1.0,
+      "dock_only": 0.9666666666666667,
+      "fusion": 1.0
+    },
+    {
+      "agv_dock_xy_noise": 0.035,
+      "geometric": 0.5333333333333333,
+      "nominal": 0.5333333333333333,
+      "vision_only": 1.0,
+      "dock_only": 0.9666666666666667,
+      "fusion": 1.0
+    },
+    {
+      "agv_dock_xy_noise": 0.045,
+      "geometric": 0.5,
+      "nominal": 0.5,
+      "vision_only": 1.0,
+      "dock_only": 0.9,
+      "fusion": 1.0
+    },
+    {
+      "agv_dock_xy_noise": 0.055,
+      "geometric": 0.43333333333333335,
+      "nominal": 0.43333333333333335,
+      "vision_only": 1.0,
+      "dock_only": 0.8333333333333334,
+      "fusion": 1.0
+    },
+    {
+      "agv_dock_xy_noise": 0.065,
+      "geometric": 0.3,
+      "nominal": 0.3,
+      "vision_only": 0.9666666666666667,
+      "dock_only": 0.6333333333333333,
+      "fusion": 0.9666666666666667
+    },
+    {
+      "agv_dock_xy_noise": 0.075,
+      "geometric": 0.1,
+      "nominal": 0.1,
+      "vision_only": 0.9666666666666667,
+      "dock_only": 0.5666666666666667,
+      "fusion": 0.9666666666666667
+    }
+  ],
+  "ckpt": "C:\\Users\\Administrator\\Documents\\trae_projects\\arm_system\\results\\act_ckpt",
+  "created_at": 1792810803.370666
+}

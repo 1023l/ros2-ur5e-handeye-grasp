@@ -236,7 +236,7 @@ def launch_setup(context, *args, **kwargs):
         condition=IfCondition(launch_rviz),
         executable="rviz2",
         name="rviz2_moveit",
-        output="log",
+        output="screen",
         arguments=["-d", rviz_config_file],
         parameters=[
             robot_description,

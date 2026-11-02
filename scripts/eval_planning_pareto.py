@@ -191,9 +191,10 @@ def main(argv=None) -> int:
                 "planning_time_s": "OMPL allowed planning time",
                 "orientation_tol_rad": "tool orientation constraint tightness",
             },
-            "note": (
-                "Report a Pareto front over clearance proxy × planning budget × "
-                "orientation constraint; pick an operating point — not a single plan_rate."
+            "interview_line": (
+                "We don't quote one plan_rate — we publish a Pareto front over "
+                "clearance proxy × planning budget × orientation constraint, "
+                "and pick an operating point for the line."
             ),
         }
         path = results_dir() / "planning_pareto_summary.json"

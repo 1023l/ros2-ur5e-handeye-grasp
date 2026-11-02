@@ -1,4 +1,16 @@
-results/
+results/*
+!results/act_eval/
+results/act_eval/*
+!results/act_eval/summary.json
+!results/act_eval/EVAL_REPORT.md
+!results/ablations/
+results/ablations/*
+!results/ablations/summary.json
+!results/ablations/EVAL_REPORT.md
+!results/stress_curve/
+results/stress_curve/*
+!results/stress_curve/stress_curve.json
+!results/stress_curve/STRESS_CURVE.md
 **/__pycache__/
 *.pyc
 *.egg-info/

@@ -20,6 +20,7 @@ from moveit_msgs.msg import (
     PositionConstraint,
 )
 from rclpy.action import ActionClient
+from rclpy.callback_groups import ReentrantCallbackGroup
 from rclpy.node import Node
 from shape_msgs.msg import SolidPrimitive
 
@@ -104,7 +105,13 @@ class MoveItArmClient(Node):
         self.group_name = group_name
         self.ee_link = ee_link
         self.base_frame = base_frame
-        self._ac = ActionClient(self, MoveGroup, "move_action")
+        self._cb_group = ReentrantCallbackGroup()
+        self._ac = ActionClient(
+            self,
+            MoveGroup,
+            "/move_action",
+            callback_group=self._cb_group,
+        )
 
     def wait_ready(self, timeout_sec: float = 20.0) -> bool:
         self.get_logger().info("Waiting for /move_action ...")

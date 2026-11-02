@@ -18,6 +18,8 @@ install(DIRECTORY
 install(PROGRAMS
   scripts/wall_clock_publisher.py
   scripts/start_rviz.sh
+  scripts/rviz2_wslg.sh
+  scripts/wsl_demo_reset.sh
   scripts/move_arm.py
   scripts/arm_perception.py
   scripts/perception_smoke.py
@@ -40,6 +42,13 @@ install(PROGRAMS
   scripts/eval_stress.py
   scripts/eval_handeye_bakeoff.py
   scripts/eval_grasp_uncertainty.py
+  scripts/collect_agv_demos.py
+  scripts/train_act.py
+  scripts/eval_act_vs_baseline.py
+  scripts/sweep_dock_stress.py
+  scripts/run_ablations.py
+  scripts/sweep_train.py
+  arm_system/policy_dock_node.py
   DESTINATION lib/${PROJECT_NAME}
 )
 

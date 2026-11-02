@@ -1,0 +1,90 @@
+{
+  "trials_per_profile": 80,
+  "profiles": {
+    "nominal": {
+      "geometric": {
+        "success_rate": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "n": 80,
+        "failure_modes": {},
+        "mean_place_err_m": 0.007178919312114365
+      },
+      "act_fusion": {
+        "success_rate": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "n": 80,
+        "failure_modes": {},
+        "mean_place_err_m": 0.004587380727116433
+      },
+      "delta_pp": 0.0
+    },
+    "agv_dock_perturb": {
+      "geometric": {
+        "success_rate": 0.3125,
+        "ci95": [
+          0.2125,
+          0.4125
+        ],
+        "n": 80,
+        "failure_modes": {
+          "miss_agv_bay": 54,
+          "miss_grasp": 1
+        },
+        "mean_place_err_m": 0.07346892028353168
+      },
+      "act_fusion": {
+        "success_rate": 0.9875,
+        "ci95": [
+          0.9625,
+          1.0
+        ],
+        "n": 80,
+        "failure_modes": {
+          "miss_grasp": 1
+        },
+        "mean_place_err_m": 0.006176433737275727
+      },
+      "delta_pp": 67.5
+    },
+    "clutter_occlusion": {
+      "geometric": {
+        "success_rate": 0.9125,
+        "ci95": [
+          0.8496875,
+          0.9625
+        ],
+        "n": 80,
+        "failure_modes": {
+          "occlusion_miss": 4,
+          "miss_grasp": 3
+        },
+        "mean_place_err_m": 0.020036978259145
+      },
+      "act_fusion": {
+        "success_rate": 0.9125,
+        "ci95": [
+          0.8496875,
+          0.9625
+        ],
+        "n": 80,
+        "failure_modes": {
+          "occlusion_miss": 4,
+          "miss_grasp": 3
+        },
+        "mean_place_err_m": 0.004484109570154267
+      },
+      "delta_pp": 0.0
+    }
+  },
+  "created_at": 1792810781.048794,
+  "ckpt": "C:\\Users\\Administrator\\Documents\\trae_projects\\arm_system\\results\\act_ckpt",
+  "act_modes": [
+    "fusion"
+  ]
+}

@@ -10,6 +10,7 @@ from arm_system.intent import list_skills_text
 from arm_system.moveit_client import SUCCESS, MoveItArmClient
 from arm_system.pick_place_core import (
     GripperClient,
+    PolicyPlaceClient,
     TargetWaiter,
     run_approach,
     run_pick_place,
@@ -78,14 +79,17 @@ class SkillExecutor:
 
         if skill_id == "pick_place":
             waiter = TargetWaiter(node_name="arm_agent_pp_waiter")
+            policy = PolicyPlaceClient(node_name="arm_agent_policy_place")
             try:
                 self._info("Waiting /arm/target_pose_base for pick_place ...")
                 pose = wait_target_pose(waiter, 20.0)
                 if pose is None:
-                    return 2, "no target_pose_base (start arm_vision_demo)"
-                code = run_pick_place(self.arm, self.gripper, pose)
+                    return 2, "no target_pose_base (start arm_agv_online)"
+                place_xy = policy.fetch_place_xy()
+                code = run_pick_place(self.arm, self.gripper, pose, place_xy=place_xy)
                 return (0, "pick_place OK") if code == 0 else (code, "pick_place failed")
             finally:
                 waiter.destroy_node()
+                policy.destroy_node()
 
         return 2, f"unknown skill: {skill_id}"

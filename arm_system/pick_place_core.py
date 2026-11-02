@@ -2,16 +2,75 @@
 
 from __future__ import annotations
 
+import re
 import time
 from typing import Optional, Tuple
 
 import rclpy
 from geometry_msgs.msg import PoseStamped
 from rclpy.node import Node
-from std_srvs.srv import SetBool
+from std_srvs.srv import SetBool, Trigger
 
 from arm_system.moveit_client import SUCCESS, MoveItArmClient
+from arm_system.policy.constants import AGV_BAY_XY
 from arm_system.pose_utils import tool_down_pose
+
+_PLACE_XY_RE = re.compile(r"place_xy=\(([-\d.]+),([-\d.]+)\)")
+
+
+def parse_place_xy_from_policy_message(message: str) -> Optional[Tuple[float, float]]:
+    m = _PLACE_XY_RE.search(message or "")
+    if not m:
+        return None
+    return float(m.group(1)), float(m.group(2))
+
+
+class PolicyPlaceClient(Node):
+    """Calls /arm/policy/correct_place for fusion-corrected AGV place XY."""
+
+    def __init__(self, node_name: str = "policy_place_client") -> None:
+        super().__init__(
+            node_name,
+            allow_undeclared_parameters=True,
+            automatically_declare_parameters_from_overrides=True,
+        )
+        self.declare_parameter("use_policy", True)
+        self.declare_parameter("policy_timeout_sec", 10.0)
+        self._cli = self.create_client(Trigger, "/arm/policy/correct_place")
+
+    def fetch_place_xy(
+        self,
+        *,
+        fallback: Tuple[float, float] = AGV_BAY_XY,
+    ) -> Tuple[float, float]:
+        if not self.get_parameter("use_policy").get_parameter_value().bool_value:
+            self.get_logger().info(
+                f"use_policy=false — place_xy=({fallback[0]:.4f},{fallback[1]:.4f})"
+            )
+            return fallback
+        timeout = float(
+            self.get_parameter("policy_timeout_sec").get_parameter_value().double_value
+        )
+        if not self._cli.wait_for_service(timeout_sec=timeout):
+            self.get_logger().warn(
+                f"/arm/policy/correct_place unavailable — fallback place_xy="
+                f"({fallback[0]:.4f},{fallback[1]:.4f})"
+            )
+            return fallback
+        fut = self._cli.call_async(Trigger.Request())
+        rclpy.spin_until_future_complete(self, fut, timeout_sec=timeout)
+        res = fut.result()
+        if res is None:
+            self.get_logger().warn("Policy service call timed out — using fallback")
+            return fallback
+        parsed = parse_place_xy_from_policy_message(res.message)
+        if parsed is None:
+            self.get_logger().warn(
+                f"Could not parse policy message: {res.message!r} — using fallback"
+            )
+            return fallback
+        self.get_logger().info(f"Policy place_xy=({parsed[0]:.4f},{parsed[1]:.4f}) [{res.message}]")
+        return parsed
 
 
 class TargetWaiter(Node):
@@ -72,7 +131,7 @@ def run_pick_place(
     *,
     approach_z: float = 0.22,
     grasp_z: float = 0.10,
-    place_xy: Tuple[float, float] = (0.30, 0.28),
+    place_xy: Tuple[float, float] = AGV_BAY_XY,
     place_z: float = 0.10,
     vel: float = 0.22,
     acc: float = 0.22,
@@ -87,6 +146,7 @@ def run_pick_place(
     place_x, place_y = place_xy
 
     arm.get_logger().info("=== PICK & PLACE start ===")
+    arm.get_logger().info(f"Place target xy=({place_x:.3f}, {place_y:.3f})")
 
     if not gripper.set_closed(False):
         return 2

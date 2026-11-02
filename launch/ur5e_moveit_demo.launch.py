@@ -10,11 +10,24 @@ RViz 操作：
   3) 拖到新位姿 → Plan → Execute
 """
 
+import os
+
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, TimerAction
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, SetEnvironmentVariable, TimerAction
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 from launch_ros.substitutions import FindPackageShare
+
+
+def _wslg_display_env():
+    """WSL2 GUI (WSLg): rviz2 needs DISPLAY / WAYLAND or no window appears."""
+    if not os.path.isdir("/mnt/wslg"):
+        return []
+    return [
+        SetEnvironmentVariable("DISPLAY", ":0"),
+        SetEnvironmentVariable("WAYLAND_DISPLAY", "wayland-0"),
+        SetEnvironmentVariable("XDG_RUNTIME_DIR", "/mnt/wslg/runtime-dir"),
+    ]
 
 
 def generate_launch_description():
@@ -55,11 +68,16 @@ def generate_launch_description():
         ],
     )
 
-    return LaunchDescription([
-        DeclareLaunchArgument('ur_type', default_value='ur5e'),
-        DeclareLaunchArgument('use_fake_hardware', default_value='true'),
-        DeclareLaunchArgument('robot_ip', default_value='127.0.0.1'),
-        DeclareLaunchArgument('launch_rviz', default_value='true'),
-        ur_control,
-        ur_moveit,
-    ])
+    return LaunchDescription(
+        [
+            DeclareLaunchArgument('ur_type', default_value='ur5e'),
+            DeclareLaunchArgument('use_fake_hardware', default_value='true'),
+            DeclareLaunchArgument('robot_ip', default_value='127.0.0.1'),
+            DeclareLaunchArgument('launch_rviz', default_value='true'),
+        ]
+        + _wslg_display_env()
+        + [
+            ur_control,
+            ur_moveit,
+        ]
+    )

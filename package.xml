@@ -2,9 +2,9 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>arm_system</name>
-  <version>0.1.0</version>
+  <version>0.2.0</version>
   <description>
-    机械臂主线包：UR5e + MoveIt2 假硬件演示（后续叠感知/手眼/抓取）。
+    UR5e + MoveIt2 fake hardware: hand-eye BA, hard-scene grasp, planning eval, residual ACT AGV dock placement.
   </description>
   <maintainer email="dev@todo.todo">dev</maintainer>
   <license>Apache-2.0</license>
